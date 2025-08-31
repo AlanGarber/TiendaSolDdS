@@ -1,5 +1,5 @@
 export default class Notificacion {
-    constructor({ id, usuarioDestino, mensaje }) {
+    constructor({ usuarioDestino, mensaje }) {
         if (!usuarioDestino) {
             throw new Error("El usuario destino es obligatorio");
         }
@@ -12,7 +12,7 @@ export default class Notificacion {
             throw new Error("El mensaje de la notificación es obligatorio");
         }
 
-        this.id = id;
+        this.id = crypto.randomUUID();
         this.usuarioDestino = usuarioDestino;
         this.mensaje = mensaje;
         this.fechaAlta = new Date();

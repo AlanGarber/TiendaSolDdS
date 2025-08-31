@@ -3,7 +3,7 @@ import EstadoPedido from "../Enums/EstadoPedido.js";
 import Moneda from "../Enums/Moneda.js";
 
 export default class Pedido {
-    constructor({ id, comprador, items, total, moneda, direccionEntrega, estado, fechaCreacion }) {
+    constructor({ comprador, items, total, moneda, direccionEntrega, estado, fechaCreacion }) {
         // Validar moneda
         if (!Object.values(Moneda).includes(moneda)) {
             throw new Error(`Moneda inválida: ${moneda}`);
@@ -14,13 +14,13 @@ export default class Pedido {
             throw new Error(`Estado de pedido inválido: ${estado}`);
         }
 
-        this.id = id;
+        this.id = crypto.randomUUID();
         this.comprador = comprador;
         this.items = items || [];
         this.total = total || 0;
         this.moneda = moneda;
         this.direccionEntrega = direccionEntrega;
-        this.estado = estado;
+        this.estado = estado || EstadoPedido.PENDIENTE;
         this.fechaCreacion = fechaCreacion || new Date();
         this.historialEstados = [];
     }
