@@ -15,7 +15,6 @@ export default class FactoryNotificacion {
             `Entrega: ${pedido.direccionEntrega.calle}, ${pedido.direccionEntrega.ciudad}`;
 
         return new Notificacion({
-            id: crypto.randomUUID(),
             usuarioDestino: vendedor,
             mensaje
         });
@@ -29,7 +28,6 @@ export default class FactoryNotificacion {
             `Pronto llegará a la dirección indicada: ${pedido.direccionEntrega.calle}, ${pedido.direccionEntrega.ciudad}`;
 
         return new Notificacion({
-            id: crypto.randomUUID(),
             usuarioDestino: comprador,
             mensaje
         });
@@ -42,8 +40,28 @@ export default class FactoryNotificacion {
             `El comprador ${comprador.nombre} canceló el pedido ${pedido.id}.`;
 
         return new Notificacion({
-            id: crypto.randomUUID(),
             usuarioDestino: vendedor,
+            mensaje
+        });
+    }
+
+    static crearNotificacionSegunEstado(pedido, usuario) {
+        switch (pedido.estado) {
+            case EstadoPedido.PENDIENTE:
+                return this.crearNotificacionNuevoPedido(pedido);
+            case EstadoPedido.ENVIADO:
+                return this.crearNotificacionPedidoEnviado(pedido, usuario);
+            case EstadoPedido.CANCELADO:
+                return this.crearNotificacionPedidoCancelado(pedido, usuario);
+            default:
+                throw new Error(`Estado de pedido desconocido: ${pedido.estado}`);
+        }
+    }
+
+    static crearNotificacionCambioEstado(pedido, usuario) {
+        const mensaje = `El estado del pedido ${pedido.id} ha cambiado a ${pedido.estado}.`;
+        return new Notificacion({
+            usuarioDestino: usuario,
             mensaje
         });
     }
